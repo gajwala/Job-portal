@@ -1,15 +1,12 @@
 import Job from "../models/job.js";
 import Application from "../models/application.js";
 
-
 export const createJob = async (req, res) => {
   try {
-    const { description, requirements, tags, companyName, contactInfo } =
-      req.body;
+    const { description, title, tags, companyName, contactInfo } = req.body;
     const job = new Job({
       description,
-      requirements,
-      tags,
+      title,
       companyName,
       contactInfo,
       postedBy: req.user._id,
@@ -26,7 +23,7 @@ export const createJob = async (req, res) => {
 export const getAllJobs = async (req, res) => {
   try {
     // Exclude the `applications` field
-    const jobs = await Job.find().select('-applications');
+    const jobs = await Job.find().select("-applications");
     res.status(200).send(jobs);
   } catch (error) {
     res.status(500).json({
@@ -50,22 +47,21 @@ export const applyToJob = async (req, res) => {
   const { jobId, userId, coverLetter } = req.body;
 
   try {
-      const newApplication = new Application({
-          jobId,
-          userId,
-      });
+    const newApplication = new Application({
+      jobId,
+      userId,
+    });
 
-      const savedApplication = await newApplication.save();
+    const savedApplication = await newApplication.save();
 
-      await Job.findByIdAndUpdate(
-          jobId,
-          { $push: { applications: savedApplication._id } },
-          { new: true }
-      );
+    await Job.findByIdAndUpdate(
+      jobId,
+      { $push: { applications: savedApplication._id } },
+      { new: true }
+    );
 
-      res.status(201).json(savedApplication);
+    res.status(201).json(savedApplication);
   } catch (error) {
-      res.status(409).json({ message: error.message });
+    res.status(409).json({ message: error.message });
   }
 };
-
