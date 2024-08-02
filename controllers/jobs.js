@@ -65,3 +65,13 @@ export const applyToJob = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 };
+
+export const getJobsPostedByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const jobs = await Job.find({ postedBy: userId });
+    res.json(jobs);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
