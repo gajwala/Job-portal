@@ -25,7 +25,8 @@ export const createJob = async (req, res) => {
 
 export const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find();
+    // Exclude the `applications` field
+    const jobs = await Job.find().select('-applications');
     res.status(200).send(jobs);
   } catch (error) {
     res.status(500).json({
@@ -37,7 +38,6 @@ export const getAllJobs = async (req, res) => {
 export const getJobDetails = async (req, res) => {
   try {
     const job = await Job.findById(req.params.jobId);
-    console.log("job found for specific id");
     res.status(200).send(job);
   } catch (error) {
     res.status(500).json({

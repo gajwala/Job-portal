@@ -47,3 +47,27 @@ export const login = async(req,res)=>{
     }
   
 }
+
+export const updateUserProfile = async (req, res) => {
+    const { id } = req.params;
+
+
+    try {
+        // Dynamically build updatedFields based on the fields present in req.body
+        const updatedFields = { ...req.body };
+
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { $set: updatedFields },
+            { new: true }
+        );
+
+        if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
