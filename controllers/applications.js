@@ -1,14 +1,16 @@
 import  Application  from "../models/application.js";
+import Job from "../models/job.js";
 
 export const getApplicationsForJob = async (req, res) => {
+    const { jobId } = req.params;
+
     try {
-        const applications = await Application.find({ jobId: req.params.jobId });
-        res.status(200).send(applications);
+        const job = await Job.findById(jobId).populate('applications');
+        if (!job) return res.status(404).json({ message: 'Job not found' });
         
+        res.status(200).json(job.applications);
     } catch (error) {
-        res.status(500).json({
-            message:error.message
-           }) 
+        res.status(404).json({ message: error.message });
     }
  
   };

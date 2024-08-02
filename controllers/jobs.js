@@ -1,6 +1,7 @@
 import Job from "../models/job.js";
 import Application from "../models/application.js";
 
+
 export const createJob = async (req, res) => {
   try {
     const { description, requirements, tags, companyName, contactInfo } =
@@ -46,17 +47,25 @@ export const getJobDetails = async (req, res) => {
 };
 
 export const applyToJob = async (req, res) => {
+  const { jobId, userId, coverLetter } = req.body;
+
   try {
-    const application = new Application({
-      jobId: req.params.jobId,
-      userId: req.user._id,
-    });
-    await application.save();
-    res.status(201).send(application);
+      const newApplication = new Application({
+          jobId,
+          userId,
+      });
+
+      const savedApplication = await newApplication.save();
+
+      await Job.findByIdAndUpdate(
+          jobId,
+          { $push: { applications: savedApplication._id } },
+          { new: true }
+      );
+
+      res.status(201).json(savedApplication);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+      res.status(409).json({ message: error.message });
   }
 };
 
