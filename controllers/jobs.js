@@ -3,12 +3,24 @@ import Application from "../models/application.js";
 
 export const createJob = async (req, res) => {
   try {
-    const { description, title, tags, companyName, contactInfo } = req.body;
+    const {
+      description,
+      title,
+      skils,
+      companyName,
+      contactInfo,
+      location,
+      experience,
+    } = req.body;
     const job = new Job({
       description,
       title,
       companyName,
       contactInfo,
+      skils,
+      location,
+      experience,
+
       postedBy: req.user._id,
     });
     await job.save();
