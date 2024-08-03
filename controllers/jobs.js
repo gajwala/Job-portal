@@ -2,6 +2,7 @@ import Job from "../models/job.js";
 import DataURIParser from "datauri/parser.js";
 import { v2 as cloudinary } from "cloudinary";
 import path from "path";
+import Application from "../models/application.js";
 function getDataUri(file) {
   const parser = new DataURIParser();
   const extName = path.extname(file.originalname).toString();
