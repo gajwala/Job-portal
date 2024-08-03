@@ -8,7 +8,7 @@ const jobSchema = mongoose.Schema(
     contactInfo: { type: String, required: true },
     experience: String,
     location: String,
-    skils: [String],
+    skills: [String],
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

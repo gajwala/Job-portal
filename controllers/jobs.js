@@ -6,7 +6,7 @@ export const createJob = async (req, res) => {
     const {
       description,
       title,
-      skils,
+      skills,
       companyName,
       contactInfo,
       location,
@@ -17,7 +17,7 @@ export const createJob = async (req, res) => {
       title,
       companyName,
       contactInfo,
-      skils,
+      skills,
       location,
       experience,
 
