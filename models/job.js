@@ -17,6 +17,7 @@ const jobSchema = mongoose.Schema(
     applications: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Application" },
     ],
+    descriptionFile: String, // Add this field to store the file path
   },
   { timestamps: true }
 );

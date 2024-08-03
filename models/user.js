@@ -10,6 +10,8 @@ const userSchema = mongoose.Schema(
     projects: [String],
     contactInfo: String,
     name: String,
+    designation: String,
+    aboutMe: String,
   },
   { timestamps: true }
 );

@@ -14,6 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Use API versioning
@@ -28,11 +29,9 @@ app.get("/", (req, res) => {
 mongoose
   .connect(process.env.URI)
   .then(() => {
-    console.log("mogoose connected");
+    console.log("MongoDB connected");
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
-  .catch(() => {
-    console.log(
-      `Something happend in server side please reach out after some time`
-    );
+  .catch((error) => {
+    console.error("MongoDB connection error:", error);
   });
