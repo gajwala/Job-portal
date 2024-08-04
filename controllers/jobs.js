@@ -52,7 +52,7 @@ export const createJob = async (req, res) => {
       location,
       experience,
       postedBy: req.user._id,
-      descriptionUrl,
+      descriptionFile: descriptionUrl,
     });
 
     await job.save();
