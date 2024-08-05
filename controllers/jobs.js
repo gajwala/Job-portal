@@ -132,7 +132,9 @@ export const getAppliedJobsByUser = async (req, res) => {
   try {
     const userId = req.params.userId;
     const applications = await Application.find({ userId }).populate("jobId");
-    const appliedJobs = applications.map((application) => application.jobId);
+    const appliedJobs = applications
+      .map((application) => application.jobId)
+      .filter((job) => job !== null); // Filter out null values
     res.status(200).json({ appliedJobs });
   } catch (error) {
     res.status(500).json({ message: error.message });
