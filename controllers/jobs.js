@@ -67,6 +67,7 @@ export const getAllJobs = async (req, res) => {
 
   try {
     const jobs = await Job.find()
+      .sort({ _id: -1 }) // Sort by _id in descending order
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
       .select("-applications"); // Exclude applications if not needed
