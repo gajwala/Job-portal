@@ -95,11 +95,11 @@ export const getJobDetails = async (req, res) => {
     });
   }
 };
-
 export const applyToJob = async (req, res) => {
   const { jobId, userId } = req.body;
 
   try {
+    // Create and save the new application
     const newApplication = new Application({
       jobId,
       userId,
@@ -107,13 +107,21 @@ export const applyToJob = async (req, res) => {
 
     const savedApplication = await newApplication.save();
 
+    // Update the job with the new application
     await Job.findByIdAndUpdate(
       jobId,
       { $push: { applications: savedApplication._id } },
       { new: true }
     );
 
-    res.status(201).json(savedApplication);
+    // Fetch the job details
+    const jobDetails = await Job.findById(jobId);
+
+    // Return both the application and job details
+    res.status(201).json({
+      application: savedApplication,
+      job: jobDetails,
+    });
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
