@@ -9,6 +9,7 @@ const jobSchema = mongoose.Schema(
     experience: String,
     location: String,
     skills: [String],
+    salaryRateForHour: String,
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

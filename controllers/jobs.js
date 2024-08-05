@@ -19,6 +19,7 @@ export const createJob = async (req, res) => {
       location,
       experience,
       description,
+      salaryRateForHour,
     } = req.body;
 
     let descriptionUrl = "";
@@ -53,6 +54,7 @@ export const createJob = async (req, res) => {
       experience,
       postedBy: req.user._id,
       descriptionFile: descriptionUrl,
+      salaryRateForHour,
     });
 
     await job.save();
