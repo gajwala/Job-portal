@@ -128,10 +128,26 @@ export const applyToJob = async (req, res) => {
 };
 
 export const getJobsPostedByUser = async (req, res) => {
+  const { page = 1, limit = 20 } = req.query;
+
   try {
     const userId = req.params.userId;
-    const jobs = await Job.find({ postedBy: userId }).sort({ createdAt: -1 }); // Sort by createdAt in descending order
-    res.json(jobs);
+
+    // Fetch the jobs posted by the user with pagination
+    const jobs = await Job.find({ postedBy: userId })
+      .sort({ createdAt: -1 }) // Sort by createdAt in descending order
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    // Count the total number of jobs posted by the user
+    const total = await Job.countDocuments({ postedBy: userId });
+
+    res.json({
+      jobs,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+    });
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
