@@ -122,7 +122,7 @@ export const applyToJob = async (req, res) => {
 export const getJobsPostedByUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const jobs = await Job.find({ postedBy: userId });
+    const jobs = await Job.find({ postedBy: userId }).sort({ createdAt: -1 }); // Sort by createdAt in descending order
     res.json(jobs);
   } catch (error) {
     res.status(500).json({ error: "Server error" });
