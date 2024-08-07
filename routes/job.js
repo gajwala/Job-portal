@@ -8,6 +8,7 @@ import {
   getJobsPostedByUser,
   getAppliedJobsByUser,
   deleteJob,
+  deleteApplicant,
 } from "../controllers/jobs.js";
 import { auth } from "../middleware/auth.js";
 import { checkRole } from "../middleware/checkRole.js";
