@@ -167,3 +167,45 @@ export const getAppliedJobsByUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const deleteJob = async (req, res) => {
+  const { jobId } = req.params;
+
+  try {
+    // Find the job and get the list of applications
+    const job = await Job.findById(jobId);
+    if (!job) return res.status(404).json({ message: "Job not found" });
+
+    // Delete all associated applications
+    await Application.deleteMany({ _id: { $in: job.applications } });
+
+    // Delete the Job document
+    await Job.findByIdAndDelete(jobId);
+
+    res.status(200).json({
+      message: "Job and associated applications removed successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteApplicant = async (req, res) => {
+  const { jobId, applicantId } = req.params;
+
+  try {
+    // Remove the applicant from the Job's applications array
+    await Job.findByIdAndUpdate(
+      jobId,
+      { $pull: { applications: applicantId } },
+      { new: true }
+    );
+
+    // Delete the Application document
+    await Application.findByIdAndDelete(applicantId);
+
+    res.status(200).json({ message: "Applicant removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

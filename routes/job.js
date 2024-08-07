@@ -7,6 +7,7 @@ import {
   applyToJob,
   getJobsPostedByUser,
   getAppliedJobsByUser,
+  deleteJob,
 } from "../controllers/jobs.js";
 import { auth } from "../middleware/auth.js";
 import { checkRole } from "../middleware/checkRole.js";
@@ -38,5 +39,12 @@ router.get(
   getAppliedJobsByUser
 );
 router.post("/apply", auth, checkRole("freelancer"), applyToJob);
-
+router.delete("/:jobId", auth, checkRole("employer"), deleteJob);
+// Delete applicant endpoint
+router.delete(
+  "/:jobId/applicants/:applicantId",
+  auth,
+  checkRole("employer"),
+  deleteApplicant
+);
 export default router;
