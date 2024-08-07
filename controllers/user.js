@@ -18,12 +18,14 @@ export const register = async (req, res) => {
     } = req.body;
 
     if (!validateEmail(email)) {
-      res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
+
     const oldUser = await User.findOne({ email });
     if (oldUser) {
-      res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       email,
@@ -36,8 +38,12 @@ export const register = async (req, res) => {
       aboutMe,
       designation,
     });
+
     await user.save();
-    res.status(201).send(user);
+
+    const { password: userPassword, ...userWithoutPassword } = user._doc;
+
+    res.status(201).send(userWithoutPassword);
   } catch (error) {
     res.status(500).json({
       message: error.message,
